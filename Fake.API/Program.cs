@@ -13,8 +13,13 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
+    var connectionString = builder.Configuration.GetConnectionString("MySQLConnectionString");
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
+
+
 
 var app = builder.Build();
 
