@@ -1,4 +1,5 @@
 ﻿using Fake.API.Models;
+using System.Collections;
 
 namespace Fake.API.Services
 {
@@ -6,5 +7,7 @@ namespace Fake.API.Services
     {
         IEnumerable<TouristRoute> GetTouristRoutes();
         TouristRoute GetTouristRoute(Guid touristRouteId);
+        bool TouristRouteExist(Guid touristRouteId);
+        IEnumerable<TouristRoutePicture> GetPicturesByTouristId(Guid touristRouteId);
     }
 }

@@ -30,6 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var mapperConfig = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile<TouristRouteProfile>(); // 確保你有創建 TouristRouteProfile 類別
+    cfg.AddProfile<TouristRoutePictureProfile>(); // 確保你有創建 TouristRoutePictureProfile 類別
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
