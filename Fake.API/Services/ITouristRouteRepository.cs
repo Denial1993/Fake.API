@@ -9,5 +9,6 @@ namespace Fake.API.Services
         TouristRoute GetTouristRoute(Guid touristRouteId);
         bool TouristRouteExist(Guid touristRouteId);
         IEnumerable<TouristRoutePicture> GetPicturesByTouristId(Guid touristRouteId);
+        TouristRoutePicture GetPicture(int pictureId);
     }
 }

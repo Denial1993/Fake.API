@@ -11,9 +11,14 @@ namespace Fake.API.Services
             _context = context;
         }
 
+        public TouristRoutePicture GetPicture(int pictureId)
+        {
+            return _context.TouristRoutePictures.Where(p => p.Id == pictureId).FirstOrDefault();
+        }
+
         public IEnumerable<TouristRoutePicture> GetPicturesByTouristId(Guid touristRouteId)
         {
-            return _context.TouristRoutePictures.Where(p =>p.TouristRouteId == touristRouteId).ToList();
+            return _context.TouristRoutePictures.Where(p => p.TouristRouteId == touristRouteId).ToList();
         }
 
         public TouristRoute GetTouristRoute(Guid touristRouteId)

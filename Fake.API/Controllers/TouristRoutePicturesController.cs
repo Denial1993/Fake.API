@@ -32,5 +32,20 @@ namespace Fake.API.Controllers
             }
             return Ok(_mapper.Map<IEnumerable<TouristRoutePictureDto>>(picturesFromRepo));
         }
+
+        [HttpGet("{pictureId}")]
+        public IActionResult GetPicture(Guid touristRouteId, int pictureId)
+        {
+            if (!_touristRouteRepository.TouristRouteExist(touristRouteId))
+            {
+                return NotFound($"旅遊路徑{touristRouteId}不存在");
+            }
+            var pictureFromRepo = _touristRouteRepository.GetPicture(pictureId);
+            if(pictureFromRepo == null)
+            {
+                return NotFound("相片不存在");
+            }
+            return Ok(_mapper.Map<TouristRoutePictureDto>(pictureFromRepo));
+        }
     }
 }
