@@ -1,5 +1,7 @@
 ﻿using Fake.API.Database;
 using Fake.API.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Fake.API.Services
 {
@@ -23,13 +25,21 @@ namespace Fake.API.Services
 
         public TouristRoute GetTouristRoute(Guid touristRouteId)
         {
-            return _context.TouristRoutes.FirstOrDefault(n => n.Id == touristRouteId);
+            return _context.TouristRoutes.Include(t => t.TouristRoutePictures).FirstOrDefault(n => n.Id == touristRouteId);
 
         }
 
-        public IEnumerable<TouristRoute> GetTouristRoutes()
+        public IEnumerable<TouristRoute> GetTouristRoutes(string keyword)
         {
-            return _context.TouristRoutes;
+            IQueryable<TouristRoute> result = _context
+                .TouristRoutes
+                .Include(t => t.TouristRoutePictures);
+            if(!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim();
+                result = result.Where(t => t.Title.Contains(keyword));
+            }
+            return result.ToList(); //ToList是IQueryable的方法
         }
 
         public bool TouristRouteExist(Guid touristRouteId)

@@ -17,15 +17,19 @@ namespace Fake.API.Controllers
             _mapper = mapper;
             _touristRouteRepository = touristRouteRepository;
         }
+
         [HttpGet]
-        public IActionResult GetTouristRoutes()
+        [HttpHead]
+        public IActionResult GetTouristRoutes([FromQuery] string keyword)
         {
-            var touristRoutesFromRepo = _touristRouteRepository.GetTouristRoutes();
+            var touristRoutesFromRepo = _touristRouteRepository.GetTouristRoutes(keyword);
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0) { return NotFound("沒有旅遊路線"); }
             var touristRouteDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
             return Ok(touristRouteDto);
         }
+
         [HttpGet("{touristRouteId}")]
+        [HttpHead]
         public IActionResult GetTouristRouteById(Guid touristRouteId)
         {
             var touristRouteFromRepo = _touristRouteRepository.GetTouristRoute(touristRouteId);
