@@ -29,15 +29,27 @@ namespace Fake.API.Services
 
         }
 
-        public IEnumerable<TouristRoute> GetTouristRoutes(string keyword)
+        public IEnumerable<TouristRoute> GetTouristRoutes(
+            string keyword,
+            string ratingOperator,
+            int? ratingValue)
         {
             IQueryable<TouristRoute> result = _context
                 .TouristRoutes
                 .Include(t => t.TouristRoutePictures);
-            if(!string.IsNullOrWhiteSpace(keyword))
+            if (!string.IsNullOrWhiteSpace(keyword))
             {
                 keyword = keyword.Trim();
                 result = result.Where(t => t.Title.Contains(keyword));
+            }
+            if (ratingValue >= 0)
+            {
+                result = ratingOperator switch
+                {
+                    "largeThan" => result.Where(t => t.Rating >= ratingValue),
+                    "lessThan" => result.Where(t => t.Rating <= ratingValue),
+                    _ => result.Where(t => t.Rating == ratingValue),
+                };
             }
             return result.ToList(); //ToList是IQueryable的方法
         }
