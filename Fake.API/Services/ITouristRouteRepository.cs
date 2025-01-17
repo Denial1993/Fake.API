@@ -12,6 +12,7 @@ namespace Fake.API.Services
         IEnumerable<TouristRoutePicture> GetPicturesByTouristId(Guid touristRouteId);
         TouristRoutePicture GetPicture(int pictureId);
         void AddTouristRoute(TouristRoute touristRoute);
+        void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture);
         bool Save();
     }
 }

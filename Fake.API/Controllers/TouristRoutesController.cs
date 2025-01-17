@@ -36,7 +36,7 @@ namespace Fake.API.Controllers
             return Ok(touristRouteDto);
         }
 
-        [HttpGet("{touristRouteId}")]
+        [HttpGet("{touristRouteId}",Name = "GetTouristRouteById")]
         [HttpHead]
         public IActionResult GetTouristRouteById(Guid touristRouteId)
         {

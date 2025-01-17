@@ -66,10 +66,23 @@ namespace Fake.API.Services
             }
             _context.TouristRoutes.Add(touristRoute);
         }
+
+        public void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture)
+        {
+            if (touristRouteId == Guid.Empty)
+            {
+                throw new ArgumentException(nameof(touristRouteId));
+            }
+            if (touristRoutePicture == null)
+            {
+                throw new ArgumentException(nameof(touristRoutePicture));
+            }
+            touristRoutePicture.TouristRouteId = touristRouteId;
+            _context.TouristRoutePictures.Add(touristRoutePicture);
+        }
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);
         }
-
     }
 }
