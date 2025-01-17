@@ -58,5 +58,18 @@ namespace Fake.API.Services
         {
             return _context.TouristRoutes.Any(t => t.Id == touristRouteId);
         }
+        public void AddTouristRoute(TouristRoute touristRoute)
+        {
+            if (touristRoute == null)
+            {
+                throw new ArgumentNullException(nameof(touristRoute));
+            }
+            _context.TouristRoutes.Add(touristRoute);
+        }
+        public bool Save()
+        {
+            return (_context.SaveChanges() >= 0);
+        }
+
     }
 }
