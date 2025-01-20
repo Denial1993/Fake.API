@@ -1,10 +1,15 @@
 ﻿using Fake.API.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Fake.API.Dtos
 {
     public class TouristRouteForCreationDto
     {
+        [Required(ErrorMessage = "錯誤訊息:Title不可為空")]
+        [MaxLength(100)]
         public string Title { get; set; }
+        [Required]
+        [MaxLength(1500)]
         public string Description { get; set; }
         //原價 X 折扣
         public decimal Price { get; set; }
@@ -21,3 +26,4 @@ namespace Fake.API.Dtos
         public ICollection<TouristRoutePictureForCreationDto> TouristRoutePictures { get; set; } = new List<TouristRoutePictureForCreationDto>();
     }
 }
+ 
