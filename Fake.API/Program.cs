@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using AutoMapper;
 using Fake.API;
 using Fake.API.Profiles;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(setupAction =>
 {
     setupAction.ReturnHttpNotAcceptable = true;
-}).AddXmlDataContractSerializerFormatters();
+}).AddXmlDataContractSerializerFormatters()
+    .ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var problemDetail = new ValidationProblemDetails(context.ModelState)
+        {
+            Type = "無所謂",
+            Title = "數據驗證失敗",
+            Status = StatusCodes.Status422UnprocessableEntity,
+            Detail = "請看詳細內容",
+            Instance = context.HttpContext.Request.Path
+        };
+        problemDetail.Extensions.Add("traceId", context.HttpContext.TraceIdentifier);
+        return new UnprocessableEntityObjectResult(problemDetail) { 
+            ContentTypes = { "Application/problem+json"}
+        };
+    };
+});
 
 // 添加依賴注入
 builder.Services.AddScoped<ITouristRouteRepository, TouristRouteRepository>();
