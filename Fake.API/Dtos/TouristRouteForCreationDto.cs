@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fake.API.Dtos
 {
-    public class TouristRouteForCreationDto
+    public class TouristRouteForCreationDto : IValidatableObject
     {
         [Required(ErrorMessage = "錯誤訊息:Title不可為空")]
         [MaxLength(100)]
@@ -24,6 +24,16 @@ namespace Fake.API.Dtos
         public string? TripType { get; set; }
         public string? DepartureCity { get; set; }
         public ICollection<TouristRoutePictureForCreationDto> TouristRoutePictures { get; set; } = new List<TouristRoutePictureForCreationDto>();
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Title == Description)
+            {
+                yield return new ValidationResult(
+                    "路線名稱必須與敘述不同",
+                    new[] { "TouristRouteForCreationDto" }
+                                        );
+            }
+        }
     }
 }
- 
