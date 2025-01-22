@@ -36,7 +36,7 @@ namespace Fake.API.Controllers
             return Ok(touristRouteDto);
         }
 
-        [HttpGet("{touristRouteId}",Name = "GetTouristRouteById")]
+        [HttpGet("{touristRouteId}", Name = "GetTouristRouteById")]
         [HttpHead]
         public IActionResult GetTouristRouteById(Guid touristRouteId)
         {
@@ -56,7 +56,26 @@ namespace Fake.API.Controllers
             _touristRouteRepository.AddTouristRoute(touristRouteModel);
             _touristRouteRepository.Save();
             var touristRouteToReturn = _mapper.Map<TouristRouteDto>(touristRouteModel);
-            return CreatedAtRoute("GetTouristRouteById",new { touristRouteId = touristRouteToReturn.Id}, touristRouteToReturn);
+            return CreatedAtRoute("GetTouristRouteById", new { touristRouteId = touristRouteToReturn.Id }, touristRouteToReturn);
+        }
+        [HttpPut("{touristRouteId}")]
+        public IActionResult UpdateTouristRoute(
+            [FromRoute] Guid touristRouteId,
+            [FromBody] TouristRouteForUpdateDto touristRouteForUpdateDto
+            )
+        {
+            if (!_touristRouteRepository.TouristRouteExist(touristRouteId))
+            {
+                return NotFound("旅遊路線找不到");
+            }
+            var touristRouteFromRepo = _touristRouteRepository.GetTouristRoute(touristRouteId);
+            //接下來比較複雜就是:
+            //1.映射 Dto
+            //2.更新 Dto
+            //3.映射 model
+            _mapper.Map(touristRouteForUpdateDto, touristRouteFromRepo);
+            _touristRouteRepository.Save();
+            return NoContent();
         }
     }
 }

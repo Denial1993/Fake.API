@@ -28,6 +28,7 @@ builder.Services.AddControllers(setupAction =>
             Detail = "請看詳細內容",
             Instance = context.HttpContext.Request.Path
         };
+
         problemDetail.Extensions.Add("traceId", context.HttpContext.TraceIdentifier);
         return new UnprocessableEntityObjectResult(problemDetail) { 
             ContentTypes = { "Application/problem+json"}
