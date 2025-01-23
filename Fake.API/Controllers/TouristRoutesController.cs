@@ -81,8 +81,9 @@ namespace Fake.API.Controllers
         }
 
         [HttpPatch("{touristRouteId}")]
-        public IActionResult PartiallyUpdateTouristRoute([FromRoute] Guid touristRouteId
-            , [FromBody] JsonPatchDocument<TouristRouteForUpdateDto> patchDocument
+        public IActionResult PartiallyUpdateTouristRoute(
+            [FromRoute] Guid touristRouteId,
+            [FromBody] JsonPatchDocument<TouristRouteForUpdateDto> patchDocument
             )
         {
             if (!_touristRouteRepository.TouristRouteExist(touristRouteId))
@@ -93,8 +94,11 @@ namespace Fake.API.Controllers
 
             var touristRouteToPatch = _mapper.Map<TouristRouteForUpdateDto>(touristRouteFromRepo);
 
-            patchDocument.ApplyTo(touristRouteToPatch);
-
+            patchDocument.ApplyTo(touristRouteToPatch, ModelState);
+            if (!TryValidateModel(touristRouteToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
             _mapper.Map(touristRouteToPatch, touristRouteFromRepo);
             _touristRouteRepository.Save();
             return NoContent();
