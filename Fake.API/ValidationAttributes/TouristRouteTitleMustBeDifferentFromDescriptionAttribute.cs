@@ -10,12 +10,12 @@ namespace Fake.API.ValidationAttributes
             ValidationContext validationContext //驗證的上下文關係對象
         )
         {
-            var touristRouteDto = (TouristRouteForCreationDto)validationContext.ObjectInstance; //通過上下文關係,獲得當前的對象
+            var touristRouteDto = (TouristRouteForManipulationDto)validationContext.ObjectInstance; //通過上下文關係,獲得當前的對象
             if (touristRouteDto.Title == touristRouteDto.Description)
             {
                 return new ValidationResult(
                     "路線名稱必須與敘述不同",
-                    new[] { "TouristRouteForCreationDto" }
+                    new[] { "TouristRouteForManipulationDto" }
                 );
             }
             return ValidationResult.Success;
