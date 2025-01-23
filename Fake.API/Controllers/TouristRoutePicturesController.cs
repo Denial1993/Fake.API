@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fake.API.Controllers
 {
-    [ApiController]
     [Route("api/touristroutes/{touristRouteId}/pictures")]
+    [ApiController]
     public class TouristRoutePicturesController : ControllerBase
     {
         private ITouristRouteRepository _touristRouteRepository;
@@ -67,6 +67,21 @@ namespace Fake.API.Controllers
                     pictureId = pictureModel.Id
                 }, pictureToReturn
             );
+        }
+        [HttpDelete("{pictureId}")]
+        public IActionResult DeletePicture(
+            [FromRoute] Guid touristRouteId,
+            [FromRoute] int pictureId
+            )
+        {
+            if (!_touristRouteRepository.TouristRouteExist(touristRouteId))
+            {
+                return NotFound($"旅遊路徑{touristRouteId}不存在");
+            }
+            var picture = _touristRouteRepository.GetPicture(pictureId);
+            _touristRouteRepository.DeleteTouristRoutePicture(picture);
+            _touristRouteRepository.Save();
+            return NoContent(); //請求成功,但無響應值
         }
     }
 }

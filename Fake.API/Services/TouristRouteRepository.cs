@@ -89,5 +89,10 @@ namespace Fake.API.Services
         {
             _context.TouristRoutes.Remove(touristRoute);
         }
+
+        public void DeleteTouristRoutePicture(TouristRoutePicture picture)
+        {
+            _context.TouristRoutePictures.Remove(picture);
+        }
     }
 }
