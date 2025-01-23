@@ -13,6 +13,7 @@ namespace Fake.API.Services
         TouristRoutePicture GetPicture(int pictureId);
         void AddTouristRoute(TouristRoute touristRoute);
         void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture);
+        void DeleteTouristRoute(TouristRoute touristRoute);
         bool Save();
     }
 }

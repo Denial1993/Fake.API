@@ -103,5 +103,18 @@ namespace Fake.API.Controllers
             _touristRouteRepository.Save();
             return NoContent();
         }
+        [HttpDelete("{touristRouteId}")]
+        public IActionResult DeleteTouristRoute([FromRoute] Guid touristRouteId)
+        {
+            if (!_touristRouteRepository.TouristRouteExist(touristRouteId))
+            {
+                return NotFound("旅遊路線找不到");
+            }
+            var touristRoute = _touristRouteRepository.GetTouristRoute(touristRouteId);
+            _touristRouteRepository.DeleteTouristRoute(touristRoute);
+            _touristRouteRepository.Save();
+
+            return NoContent(); //表示響應成功,但沒有回傳值
+        }
     }
 }
