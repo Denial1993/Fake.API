@@ -8,6 +8,7 @@ using AutoMapper;
 using Fake.API;
 using Fake.API.Profiles;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(setupAction =>
 {
     setupAction.ReturnHttpNotAcceptable = true;
-}).AddXmlDataContractSerializerFormatters()
+}).AddNewtonsoftJson(setupAction =>
+{
+    setupAction.SerializerSettings.ContractResolver = new
+    CamelCasePropertyNamesContractResolver();
+})
+    .AddXmlDataContractSerializerFormatters()
     .ConfigureApiBehaviorOptions(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
@@ -30,8 +36,9 @@ builder.Services.AddControllers(setupAction =>
         };
 
         problemDetail.Extensions.Add("traceId", context.HttpContext.TraceIdentifier);
-        return new UnprocessableEntityObjectResult(problemDetail) { 
-            ContentTypes = { "Application/problem+json"}
+        return new UnprocessableEntityObjectResult(problemDetail)
+        {
+            ContentTypes = { "Application/problem+json" }
         };
     };
 });

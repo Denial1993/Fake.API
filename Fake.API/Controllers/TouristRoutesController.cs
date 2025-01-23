@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Azure;
 using Fake.API.Dtos;
 using Fake.API.Models;
 using Fake.API.ResourceParameters;
 using Fake.API.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
@@ -74,6 +76,26 @@ namespace Fake.API.Controllers
             //2.更新 Dto
             //3.映射 model
             _mapper.Map(touristRouteForUpdateDto, touristRouteFromRepo);
+            _touristRouteRepository.Save();
+            return NoContent();
+        }
+
+        [HttpPatch("{touristRouteId}")]
+        public IActionResult PartiallyUpdateTouristRoute([FromRoute] Guid touristRouteId
+            , [FromBody] JsonPatchDocument<TouristRouteForUpdateDto> patchDocument
+            )
+        {
+            if (!_touristRouteRepository.TouristRouteExist(touristRouteId))
+            {
+                return NotFound("旅遊路線找不到");
+            }
+            var touristRouteFromRepo = _touristRouteRepository.GetTouristRoute(touristRouteId);
+
+            var touristRouteToPatch = _mapper.Map<TouristRouteForUpdateDto>(touristRouteFromRepo);
+
+            patchDocument.ApplyTo(touristRouteToPatch);
+
+            _mapper.Map(touristRouteToPatch, touristRouteFromRepo);
             _touristRouteRepository.Save();
             return NoContent();
         }
