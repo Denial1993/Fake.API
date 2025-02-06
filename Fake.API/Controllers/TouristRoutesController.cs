@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Azure;
 using Fake.API.Dtos;
+using Fake.API.Helper;
 using Fake.API.Models;
 using Fake.API.ResourceParameters;
 using Fake.API.Services;
@@ -116,5 +117,10 @@ namespace Fake.API.Controllers
 
             return NoContent(); //表示響應成功,但沒有回傳值
         }
+        //[HttpDelete("{touristIDs}")]
+        //public IActionResult DeleteByIDs([ModelBinder(BinderType =typeof(ArrayModelBinder))][FromRoute]IEnumerable<Guid> touristIDs)
+        //{
+            
+        //}
     }
 }
