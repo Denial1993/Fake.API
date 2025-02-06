@@ -6,16 +6,16 @@ namespace Fake.API.Services
 {
     public interface ITouristRouteRepository
     {
-        IEnumerable<TouristRoute> GetTouristRoutes(string keyword, string ratingOperator, int? ratingValue);
-        TouristRoute GetTouristRoute(Guid touristRouteId);
-        bool TouristRouteExist(Guid touristRouteId);
-        IEnumerable<TouristRoutePicture> GetPicturesByTouristId(Guid touristRouteId);
-        TouristRoutePicture GetPicture(int pictureId);
+        Task<IEnumerable<TouristRoute> GetTouristRoutesAsync(string keyword, string ratingOperator, int? ratingValue);
+        Task<TouristRoute> GetTouristRouteAsync(Guid touristRouteId);
+        Task<bool> TouristRouteExistAsync(Guid touristRouteId);
+        Task<IEnumerable<TouristRoutePicture>> GetPicturesByTouristIdAsync(Guid touristRouteId);
+        Task<TouristRoutePicture> GetPictureAsync(int pictureId);
         void AddTouristRoute(TouristRoute touristRoute);
         void AddTouristRoutePicture(Guid touristRouteId, TouristRoutePicture touristRoutePicture);
         void DeleteTouristRoute(TouristRoute touristRoute);
         void DeleteTouristRoutePicture(TouristRoutePicture picture);
-        bool Save();
+        Task<bool> SaveAsync();
 
     }
 }
