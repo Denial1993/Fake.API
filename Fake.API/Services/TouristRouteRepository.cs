@@ -1,6 +1,7 @@
 ﻿using Fake.API.Database;
 using Fake.API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Fake.API.Services
@@ -13,23 +14,23 @@ namespace Fake.API.Services
             _context = context;
         }
 
-        public TouristRoutePicture GetPicture(int pictureId)
+        public async Task<TouristRoutePicture> GetPictureAsync(int pictureId)
         {
-            return _context.TouristRoutePictures.Where(p => p.Id == pictureId).FirstOrDefault();
+            return await _context.TouristRoutePictures.Where(p => p.Id == pictureId).FirstOrDefaultAsync();
         }
 
-        public IEnumerable<TouristRoutePicture> GetPicturesByTouristId(Guid touristRouteId)
+        public async Task<IEnumerable<TouristRoutePicture>> GetPicturesByTouristIdAsync(Guid touristRouteId)
         {
             return _context.TouristRoutePictures.Where(p => p.TouristRouteId == touristRouteId).ToList();
         }
 
-        public TouristRoute GetTouristRoute(Guid touristRouteId)
+        public async Task<TouristRoute> GetTouristRouteAsync(Guid touristRouteId)
         {
             return _context.TouristRoutes.Include(t => t.TouristRoutePictures).FirstOrDefault(n => n.Id == touristRouteId);
 
         }
 
-        public IEnumerable<TouristRoute> GetTouristRoutes(
+        public async Task<IEnumerable<TouristRoute>> GetTouristRoutesAsync(
             string keyword,
             string ratingOperator,
             int? ratingValue)
@@ -51,12 +52,12 @@ namespace Fake.API.Services
                     _ => result.Where(t => t.Rating == ratingValue),
                 };
             }
-            return result.ToList(); //ToList是IQueryable的方法
+            return await result.ToListAsync(); //ToList是IQueryable的方法
         }
 
-        public bool TouristRouteExist(Guid touristRouteId)
+        public async Task<bool> TouristRouteExistAsync(Guid touristRouteId)
         {
-            return _context.TouristRoutes.Any(t => t.Id == touristRouteId);
+            return await _context.TouristRoutes.AnyAsync(t => t.Id == touristRouteId);
         }
         public void AddTouristRoute(TouristRoute touristRoute)
         {
@@ -80,9 +81,9 @@ namespace Fake.API.Services
             touristRoutePicture.TouristRouteId = touristRouteId;
             _context.TouristRoutePictures.Add(touristRoutePicture);
         }
-        public bool Save()
+        public async Task<bool> SaveAsync()
         {
-            return (_context.SaveChanges() >= 0);
+            return (await _context.SaveChangesAsync() >= 0);
         }
 
         public void DeleteTouristRoute(TouristRoute touristRoute)
